@@ -13,6 +13,6 @@ public class Professor extends Pessoa {
     }
 
     public void Imprimir(String prefixo) {
-        System.out.printf("%s%s (SIAPE %d)\n", prefixo, nome, siape);
+        System.out.printf("%s%s (SIAPE %d)[%d]\n", prefixo, nome, siape, id);
     }
 }
