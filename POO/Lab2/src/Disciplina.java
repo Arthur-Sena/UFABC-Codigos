@@ -19,16 +19,8 @@ public class Disciplina {
         this.alunos.add(aluno);
     }
 
-    //public void IncluirProfessor (Professor professor) {
-    //	this.professor = professor;
-    //}
-
-    //public void IncluirAluno  (Aluno aluno) {
-    //	this.alunos.add(aluno);
-    //}
-
     public void Imprimir(String prefixo) {
-        System.out.printf("%s%s\n", prefixo, nome);
+        System.out.printf("%s%s [%s]\n", prefixo, nome, Curso.gerarCodigoDisciplina(nome));
         System.out.printf("%s\tProfessor:\n", prefixo);
         if (professor == null)
             System.out.printf("%s\t\t-vazio-\n", prefixo);

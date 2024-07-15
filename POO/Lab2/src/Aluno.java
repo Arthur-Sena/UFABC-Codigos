@@ -13,6 +13,6 @@ public class Aluno extends Pessoa {
     }
 
     public void Imprimir(String prefixo) {
-        System.out.printf("%s%s (RA %d)\n", prefixo, nome, RA);
+        System.out.printf("%s%s (RA %d)[%d]\n", prefixo, nome, RA, id);
     }
 }
