@@ -1,0 +1,14 @@
+
+Bem vindo ao jogo de xadrez no haskel:
+
+Instruções:
+ -> Para realizar um movimento digite no terminal as coordenadas desejadas.
+      Por exemplo:
+       
+      a1 b2
+    
+      Para mover a peça da posição coluna a linha 1 para a coluna b linha 2.
+ 
+   -> Para os casos especiais o comando necessário aparecerá junto a mesa de jogo.
+
+Bom Jogo!
