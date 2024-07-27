@@ -4,6 +4,7 @@ public class Curso {
 
     private String nome;
     private ArrayList<Disciplina> disciplinas;
+    public static String universidade = "UFABC";
 
     public Curso(String nome) {
         disciplinas = new ArrayList<Disciplina>();
@@ -15,6 +16,7 @@ public class Curso {
     }
 
     public void Imprimir() {
+        System.out.printf("%s\n", universidade);
         System.out.printf("Curso de %s:\n", nome);
         System.out.println("\tDisciplinas:");
         if (disciplinas.size() > 0) {
@@ -24,5 +26,9 @@ public class Curso {
         } else {
             System.out.println("\t\t-vazio-");
         }
+    }
+
+    public static String gerarCodigoDisciplina(String nomeDisciplina){
+        return universidade + "_" + nomeDisciplina;
     }
 }
