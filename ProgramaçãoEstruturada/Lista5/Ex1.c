@@ -2,22 +2,27 @@
 //inteiros fornecidos pelo usuário e compute a média desses números.
 
 #include <stdio.h>
+#include <stdlib.h>
 
 int main() {
     int tamanhoN;
 
     printf("Digite um n: ");
-    scanf("%d", tamanhoN);
+    scanf("%d", &tamanhoN);
     
-    int* v = malloc(tamanhoN * sizeof(int));
 
-    for (int i = 0; i < tamanhoN; i++)
-        scanf("%d", &v[i]);
-        
+    int* v = (int*)malloc(5 * sizeof(int));
     int total = 0;
-    for (int i = 0; i < tamanhoN; i++)
-        total += v[i];
+    for (int i = 1; i <= tamanhoN; i++){
+        printf("\nDigite a nota %d: ", i);
+        scanf("%d", &v[i-1]);
+        total += v[i-1];
+    }
         
-    printf("Media: %lf\n", total / (double) n); 
+    printf("Media: %lf \n", (total / (double)tamanhoN)); 
+
+    //Liberando memória
+    for (int i = 0; i <= tamanhoN; i++)
+        free(&v[i]);
     return 0;
 }
