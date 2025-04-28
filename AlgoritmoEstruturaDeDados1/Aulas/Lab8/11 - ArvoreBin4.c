@@ -1,0 +1,375 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct tNo 
+{
+    int chave;
+    struct tNo *esquerda;
+    struct tNo *direita;
+    struct tNo *pai;
+} No;
+
+typedef struct tArvore
+{
+    No *raiz;
+} Arvore;
+
+
+No * criarNo(int);
+Arvore * criarArvore();
+No * raiz(Arvore *);
+int arvoreVazia(Arvore *);
+void preOrder(No *, int *);
+void inOrder(No *, int *);
+void postOrder(No *, int *);
+No * buscar(Arvore *, int);
+void inserir(Arvore *, No *);
+No * remover(Arvore *, int);
+No * antecessor(No *);
+void removerAntecessor(No *);
+
+int main()
+{
+    char opt[15];
+    int chave;
+    No *novo, *rem;
+    Arvore *a = criarArvore();
+
+    while(scanf("%s", opt) != EOF)
+    {
+        if(strcmp(opt, "insert") == 0)
+        {
+            scanf("%d", &chave);
+            novo = criarNo(chave);
+            inserir(a, novo);
+        }
+        else if(strcmp(opt, "delete") == 0)
+        {
+            scanf("%d", &chave);
+            rem = remover(a, chave);
+            if(rem != NULL)
+            {
+                printf("%d\n", rem->chave);
+            }
+        }
+        else if(strcmp(opt, "in-order") == 0)
+        {
+            if(!arvoreVazia(a))
+            {
+                int primeiro = 1;
+                inOrder(raiz(a), &primeiro);
+                printf("\n");
+            }
+        }
+        else if(strcmp(opt, "post-order") == 0)
+        {
+            if(!arvoreVazia(a))
+            {
+                int primeiro = 1;
+                postOrder(raiz(a), &primeiro);
+                printf("\n");
+            }
+        }
+        else if(strcmp(opt, "pre-order") == 0)
+        {
+            if(!arvoreVazia(a))
+            {
+                int primeiro = 1;
+                preOrder(raiz(a), &primeiro);
+                printf("\n");
+            }
+        }
+    }
+    return 0;
+}
+
+void inOrder(No *r, int *primeiro)
+{
+    if(r != NULL)
+    {
+        inOrder(r->esquerda, primeiro);
+        if(*primeiro)
+        {
+            *primeiro = 0;
+        }
+        else
+        {
+            printf(" ");
+        }
+        printf("%d", r->chave);
+        inOrder(r->direita, primeiro);
+    }
+}
+
+void postOrder(No *r, int *primeiro)
+{
+    if(r != NULL)
+    {
+        postOrder(r->esquerda, primeiro);
+        postOrder(r->direita, primeiro);
+        if(*primeiro)
+        {
+            *primeiro = 0;
+        }
+        else
+        {
+            printf(" ");
+        }
+        printf("%d", r->chave);
+    }
+}
+
+void preOrder(No *r, int *primeiro)
+{
+    if(r != NULL)
+    {
+        if(*primeiro)
+        {
+            *primeiro = 0;
+        }
+        else
+        {
+            printf(" ");
+        }
+        printf("%d", r->chave);
+        preOrder(r->esquerda, primeiro);
+        preOrder(r->direita, primeiro);
+    }
+}
+
+No *criarNo(int n)
+{
+    No* it = (No*)malloc(sizeof(No));
+    if(it != NULL)
+    {
+        it->chave = n;
+        it->pai = NULL;
+        it->esquerda = NULL;
+        it->direita = NULL;
+    }
+
+    return it;
+}
+
+Arvore *criarArvore()
+{
+    Arvore *a = (Arvore*)malloc(sizeof(Arvore));
+    if(a != NULL)
+    {
+        a->raiz = NULL;
+    }
+    return a;
+}
+
+
+No *raiz(Arvore *a)
+{
+    return a->raiz;
+}
+
+int arvoreVazia(Arvore *a)
+{
+    return raiz(a) == NULL;
+}
+
+No *buscar(Arvore *a, int chave)
+{
+    No *no = raiz(a);
+
+    while(no != NULL && no->chave != chave)
+    {
+        if(no->chave < chave)
+        {
+            no = no->direita;
+        }
+        else
+        {
+            no = no->esquerda;
+        }
+    }
+    return no;
+}
+
+void inserir(Arvore *a, No *novo)
+{
+    
+    No *pai = NULL, *filho = raiz(a);
+
+    while(filho != NULL)
+    {
+        pai = filho;
+        if(filho->chave <= novo->chave)
+        {
+            filho = filho->direita;
+        }
+        else
+        {
+            filho = filho->esquerda;
+        }
+    }
+    
+    if(pai != NULL)
+    {
+        novo->pai = pai;
+        if(pai->chave <= novo->chave)
+        {
+            pai->direita = novo;
+        }
+        else
+        {
+            pai->esquerda = novo;
+        }
+    }
+    else
+    {
+        a->raiz = novo;
+    }
+    
+}
+
+No *remover(Arvore *a, int rem)
+{
+    No *pai = NULL, *filho = raiz(a);
+
+    while(filho != NULL && filho->chave != rem)
+    {
+        pai = filho;
+        if(filho->chave < rem)
+        {  
+            filho = filho->direita;
+        }
+        else
+        {
+            filho = filho->esquerda;
+        }
+    }
+
+    if(filho != NULL) // Encontrei o valor para se remover
+    {
+        if(filho->direita == NULL && filho->esquerda == NULL) // Removendo uma folha
+        {
+            if(pai != NULL) // Não é uma raíz
+            {
+                if(pai->direita == filho)
+                {
+                    pai->direita = NULL;
+                }
+                else
+                {
+                    pai->esquerda = NULL;
+                }
+            }
+            else // É uma raíz
+            {
+                a->raiz = NULL;
+            }
+        }
+
+        else if(filho->direita != NULL && filho->esquerda != NULL) // Removendo um pai de dois filhos
+        {
+            No* ant = antecessor(filho);
+            if(ant != NULL)
+            {
+                int chaveOriginal = filho->chave;
+                filho->chave = ant->chave;
+                removerAntecessor(ant);
+                ant->chave = chaveOriginal;
+                return ant;
+            }
+        }
+
+        else // Removendo pai de um filho só
+        {
+            if(pai != NULL) // Não é raíz
+            {
+                if(pai->esquerda == filho) // Nó a ser removido é filho esquerdo do seu pai
+                {
+                    if(filho->esquerda != NULL)
+                    {
+                        pai->esquerda = filho->esquerda;
+                        filho->esquerda->pai = pai;
+                    }
+                    else
+                    {
+                        pai->esquerda = filho->direita;
+                        filho->direita->pai = pai;
+                    }
+                }
+                else // Nó a ser removido é filho direito de seu pai
+                {
+                    if(filho->esquerda != NULL)
+                    {
+                        pai->direita = filho->esquerda;
+                        filho->esquerda->pai = pai;
+                    }
+                    else
+                    {
+                        pai->direita = filho->direita;
+                        filho->direita->pai = pai;
+                    }
+                }
+            }
+            else // É raíz
+            {
+                if(filho->esquerda != NULL)
+                {
+                    a->raiz = filho->esquerda;
+                    filho->esquerda->pai = NULL;
+                }
+                else
+                {
+                    a->raiz = filho->direita;
+                    filho->direita->pai = NULL;
+                }
+            }
+        }
+        filho->pai = NULL;
+        filho->esquerda = NULL;
+        filho->direita = NULL;
+    }
+    return filho;
+}
+
+No *antecessor(No *n)
+{
+    if(n != NULL)
+    {
+        No *ant = n->esquerda;
+
+        while(ant->direita != NULL)
+        {
+            ant = ant->direita;
+        }
+
+        return ant;
+    }
+}
+
+void removerAntecessor(No *ant)
+{
+    if(ant != NULL)
+    {
+        No *pai = ant->pai;
+
+        if(pai != NULL)
+        {
+            if(pai->direita == ant)
+            {
+                pai->direita = ant->esquerda;
+            }
+            else
+            {
+                pai->esquerda = ant->esquerda;
+            }
+        }
+
+        if(ant->esquerda != NULL)
+        {
+            ant->esquerda->pai = pai;
+        }
+        ant->pai = NULL;
+        ant->esquerda = NULL;
+        ant->direita = NULL;
+    }
+}
