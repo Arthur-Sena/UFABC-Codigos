@@ -147,6 +147,42 @@ void removerAntecessor(No *ant)
 }
 #pragma endregion
 
+#pragma region "Sucessor"
+No *sucessor(No *n)
+{
+    if(n != NULL)
+    {
+        No *suc = n->direita;
+        while(suc->esquerda != NULL)
+            suc = suc->esquerda;
+
+        return suc;
+    }
+}
+
+void removerSucessor(No *suc)
+{
+    if(suc != NULL)
+    {
+        No *pai = suc->pai;
+        if(pai != NULL)
+        {
+            if(pai->esquerda == suc)
+                pai->esquerda = suc->direita;
+            else
+                pai->direita = suc->direita;
+        }
+
+        if(suc->direita != NULL)
+            suc->direita->pai = pai;
+
+        suc->pai = NULL;
+        suc->esquerda = NULL;
+        suc->direita = NULL;
+    }
+}
+#pragma endregion
+
 #pragma region  "Inserir/Remover"
 //Nâo insere valor igual
 void inserir(Arvore *a, No *novo)
@@ -203,12 +239,12 @@ No *remover(Arvore *a, int rem)
         }
         else if(filho->direita != NULL && filho->esquerda != NULL) // Removendo um pai de dois filhos
         {
-            No* ant = antecessor(filho);
+            No* ant = sucessor(filho);
             if(ant != NULL)
             {
                 int chaveOriginal = filho->chave;
                 filho->chave = ant->chave;
-                removerAntecessor(ant);
+                removerSucessor(ant);
                 ant->chave = chaveOriginal;
                 return ant;
             }
