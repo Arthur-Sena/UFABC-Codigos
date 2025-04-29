@@ -37,6 +37,9 @@ No * remover(Arvore *, char);
 No * buscar(Arvore *, char);
 No * sucessor(No *);
 No * antecessor(No *);
+No * maiorElemento(No *raiz);
+No * menorElemento(No *raiz);
+
 void removerSucessor(No *);
 void removerAntecessor(No *);
 #pragma endregion
@@ -62,6 +65,42 @@ int main()
             rem = remover(a, chave);
             if(rem != NULL)
                 printf("%c\n", rem->chave);
+        }
+        // else if(strcmp(opt, "in-order") == 0)
+        // {
+        //     if(arvoreVazia(a)) continue;
+
+        //     int primeiro = 1;
+        //     inOrderInline(raiz(a), &primeiro);
+        //     printf("\n");
+        // }
+        // else if(strcmp(opt, "post-order") == 0)
+        // {
+        //     if(arvoreVazia(a)) continue;
+
+        //     int primeiro = 1;
+        //     postOrderInline(raiz(a), &primeiro);
+        //     printf("\n");
+        // }
+        // else if(strcmp(opt, "pre-order") == 0)
+        // {
+        //     if(arvoreVazia(a)) continue;
+
+        //     int primeiro = 1;
+        //     preOrderInline(raiz(a), &primeiro);
+        //     printf("\n");
+        // }
+        else if (strcmp(opt, "maior") == 0)
+        {
+            No *maiorValor = maiorElemento(a->raiz);
+            if (maiorValor != NULL)
+                printf("%d", maiorValor->chave);
+        }
+        else if (strcmp(opt, "menor") == 0)
+        {
+            No *menorValor = menorElemento(a->raiz);
+            if (menorValor != NULL)
+                printf("%d", menorValor->chave);
         }
         else if(strcmp(opt, "in-order") == 0)
         {
@@ -269,12 +308,12 @@ No *remover(Arvore *a, char rem)
         }
         else if(filho->direita != NULL && filho->esquerda != NULL) // Removendo um pai de dois filhos
         {
-            No* ant = sucessor(filho);
+            No* ant = antecessor(filho);
             if(ant != NULL)
             {
                 int chaveOriginal = filho->chave;
                 filho->chave = ant->chave;
-                removerSucessor(ant);
+                removerAntecessor(ant);
                 ant->chave = chaveOriginal;
                 return ant;
             }
@@ -354,6 +393,30 @@ No *antecessor(No *n)
 
         return ant;
     }
+}
+#pragma endregion
+
+#pragma region "Maior e Menor"
+No *maiorElemento(No *raiz)
+{
+    if (raiz == NULL)
+        return NULL;
+
+    while (raiz->direita != NULL)
+        raiz = raiz->direita;
+    
+    return raiz;
+}
+
+No *menorElemento(No *raiz)
+{
+    if (raiz == NULL)
+        return NULL;
+
+    while (raiz->esquerda != NULL)
+        raiz = raiz->esquerda;
+
+    return raiz;
 }
 #pragma endregion
 

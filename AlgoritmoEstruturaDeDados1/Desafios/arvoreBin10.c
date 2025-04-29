@@ -37,6 +37,9 @@ No * remover(Arvore *, char);
 No * buscar(Arvore *, char);
 No * sucessor(No *);
 No * antecessor(No *);
+No * maiorElemento(No *raiz);
+No * menorElemento(No *raiz);
+
 void removerSucessor(No *);
 void removerAntecessor(No *);
 #pragma endregion
@@ -67,20 +70,37 @@ int main()
         {
             if(arvoreVazia(a)) continue;
 
-            inOrder(raiz(a));
+            int primeiro = 1;
+            inOrderInline(raiz(a), &primeiro);
+            printf("\n");
         }
         else if(strcmp(opt, "post-order") == 0)
         {
             if(arvoreVazia(a)) continue;
 
-            postOrder(raiz(a));
+            int primeiro = 1;
+            postOrderInline(raiz(a), &primeiro);
+            printf("\n");
         }
         else if(strcmp(opt, "pre-order") == 0)
         {
             if(arvoreVazia(a)) continue;
 
             int primeiro = 1;
-            preOrder(raiz(a));
+            preOrderInline(raiz(a), &primeiro);
+            printf("\n");
+        }
+        else if (strcmp(opt, "maior") == 0)
+        {
+            No *maiorValor = maiorElemento(a->raiz);
+            if (maiorValor != NULL)
+                printf("%d", maiorValor->chave);
+        }
+        else if (strcmp(opt, "menor") == 0)
+        {
+            No *menorValor = menorElemento(a->raiz);
+            if (menorValor != NULL)
+                printf("%d", menorValor->chave);
         }
     }
     return 0;
@@ -354,6 +374,30 @@ No *antecessor(No *n)
 
         return ant;
     }
+}
+#pragma endregion
+
+#pragma region "Maior e Menor"
+No *maiorElemento(No *raiz)
+{
+    if (raiz == NULL)
+        return NULL;
+
+    while (raiz->direita != NULL)
+        raiz = raiz->direita;
+    
+    return raiz;
+}
+
+No *menorElemento(No *raiz)
+{
+    if (raiz == NULL)
+        return NULL;
+
+    while (raiz->esquerda != NULL)
+        raiz = raiz->esquerda;
+
+    return raiz;
 }
 #pragma endregion
 
