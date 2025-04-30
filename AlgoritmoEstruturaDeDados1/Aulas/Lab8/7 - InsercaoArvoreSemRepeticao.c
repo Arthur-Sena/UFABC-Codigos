@@ -40,7 +40,9 @@ int main()
             inserir(a, it);
         }
         else
+        {
             printf("Chave %d ja existe na arvore!\n", chave);
+        }
     }
 
     return 0;
@@ -64,8 +66,9 @@ Arvore *criarArvore()
 {
     Arvore *a = (Arvore*)malloc(sizeof(Arvore));
     if(a != NULL)
+    {
         a->raiz = NULL;
-    
+    }
     return a;
 }
 
@@ -87,9 +90,13 @@ No *buscar(Arvore *a, int chave)
     while(no != NULL && no->chave != chave)
     {
         if(no->chave < chave)
+        {
             no = no->direita;
+        }
         else
+        {
             no = no->esquerda;
+        }
     }
     return no;
 }
@@ -107,20 +114,30 @@ void inserir(Arvore *a, No *novo)
         {
             pai = filho;
             if(filho->chave < novo->chave)
+            {
                 filho = filho->direita;
+            }
             else
+            {
                 filho = filho->esquerda;
+            }
         }
 
         if(pai != NULL)
         {
             novo->pai = pai;
             if(pai->chave < novo->chave)
+            {
                 pai->direita = novo;
+            }
             else
+            {
                 pai->esquerda = novo;
+            }
         }
         else
+        {
             a->raiz = novo;
+        }
     }
 }
